@@ -19,7 +19,9 @@ namespace frontier
 		void SetLightUniform(std::string _uniformName, std::weak_ptr<Shader> _shader, int _index = -1) override;
 		void SetLightUniformPBR(std::string _uniformName, std::weak_ptr<Shader> _shader, int _index = -1);
 		glm::mat4 getLightSpaceMatrix();
-		glm::vec3 getPosition();
+		glm::vec3 getDirection();
+		glm::vec3 getLightColor();
+		void setLightColor(glm::vec3 _newColor);
 		std::shared_ptr<DepthMap> getDepthMap();
 	};
 

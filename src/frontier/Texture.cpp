@@ -39,6 +39,7 @@ namespace frontier
 
 		rtn->SetTexture(rtnID, _textureLocation);
 		_resources->AddCreatedResource(rtn);
+		std::cout << "Texture Loaded" << std::endl;
 		return rtn;
 	}
 

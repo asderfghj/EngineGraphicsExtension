@@ -32,7 +32,7 @@ uniform DirectionalLight dirlights[MAX_NR_DIR_LIGHTS];
 uniform int NR_DIR_LIGHTS;
 
 #define MAX_NR_POINT_LIGHTS 10
-uniform PointLight pointlights[MAX_NR_DIR_LIGHTS];
+uniform PointLight pointlights[MAX_NR_POINT_LIGHTS];
 uniform int NR_POINT_LIGHTS;
 
 #define PI 3.1415926535
@@ -66,8 +66,6 @@ void main()
 		vec3 L = normalize(-dirlights[i].direction);
 		vec3 H = normalize(V + L);
 		
-		float distance = length(pointlights[i].position - WorldPos);
-		float attenuation = 1.0 / (distance * distance);
 		vec3 radiance = dirlights[i].color;
 		vec3 f0 = vec3(0.04);
 		f0 = mix(f0, albedo, metallic);
@@ -122,7 +120,6 @@ void main()
 	color = pow(color, vec3(1.0/2.2));
 	
 	FragColor = vec4(color, 1.0);
-	
 }
 
 vec3 fresnelShlick(float _cosTheta, vec3 _F0)

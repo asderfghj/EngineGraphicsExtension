@@ -116,6 +116,8 @@ namespace frontier
 
 		_resources->AddCreatedResource(rtn);
 
+		std::cout << "Shader Compiled and loaded" << std::endl;
+
 		return rtn;
 
 	}

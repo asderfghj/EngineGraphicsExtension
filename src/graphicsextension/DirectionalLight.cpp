@@ -68,10 +68,21 @@ namespace frontier
 		return m_lightProjectionMatrix * lightViewMatrix;
 	}
 
-	glm::vec3 DirectionalLight::getPosition()
+	glm::vec3 DirectionalLight::getDirection()
 	{
 		//return GetEntity()->getComponent<Transform>()->GetPosition();
 		return m_direction;
+	}
+
+	glm::vec3 DirectionalLight::getLightColor()
+	{
+		return m_diffuse;
+	}
+
+	void DirectionalLight::setLightColor(glm::vec3 _newColor)
+	{
+		m_diffuse = _newColor;
+		m_specular = _newColor;
 	}
 
 	std::shared_ptr<DepthMap> DirectionalLight::getDepthMap()

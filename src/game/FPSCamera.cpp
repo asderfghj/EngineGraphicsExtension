@@ -1,6 +1,8 @@
 #include "FPSCamera.h"
 #include <SDL2/SDL.h>
 #include "gtc/matrix_transform.hpp"
+#include "graphicsextension/LightController.h"
+#include "graphicsextension/DirectionalLight.h"
 
 void FPSCamera::OnInit(std::weak_ptr<frontier::Entity> _parent)
 {
@@ -8,6 +10,7 @@ void FPSCamera::OnInit(std::weak_ptr<frontier::Entity> _parent)
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	m_sensitivity = 0.05f;
 	m_moveSpeed = 5.0f;
+	m_yPos = _parent.lock()->getComponent<frontier::Transform>()->GetPosition().y;
 }
 
 void FPSCamera::OnTick()
@@ -91,6 +94,31 @@ void FPSCamera::OnTick()
 		GetCore()->setShaderMode(frontier::Core::PBR);
 	}
 
+	if (GetInput()->GetKey(frontier::Input::Z_KEY))
+	{
+		if (GetCore()->GetLightController()->HasDirectionalLight())
+		{
+			float newLightColor = GetCore()->GetLightController()->GetDirectionalLight()->getLightColor().x + 0.05f;
+			if (newLightColor > 1.0f)
+			{
+				newLightColor = 1.0f;
+			}
+			GetCore()->GetLightController()->GetDirectionalLight()->setLightColor(glm::vec3(newLightColor));
+		}
+	}
+
+	if (GetInput()->GetKey(frontier::Input::X_KEY))
+	{
+		if (GetCore()->GetLightController()->HasDirectionalLight())
+		{
+			float newLightColor = GetCore()->GetLightController()->GetDirectionalLight()->getLightColor().x - 0.05f;
+			if (newLightColor < 0.05f)
+			{
+				newLightColor = 0.05f;
+			}
+			GetCore()->GetLightController()->GetDirectionalLight()->setLightColor(glm::vec3(newLightColor));
+		}
+	}
 }
 
 glm::vec3 FPSCamera::GetForwardVector()

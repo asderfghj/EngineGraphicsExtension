@@ -86,7 +86,7 @@ namespace frontier
 
 	glm::vec3 LightController::GetDirectionalLightPosition()
 	{
-		return m_directionalLight.lock()->getComponent<DirectionalLight>()->getPosition();
+		return m_directionalLight.lock()->getComponent<DirectionalLight>()->getDirection();
 	}
 
 	std::shared_ptr<DepthMap> LightController::GetDirectionalLightDepthMap()
@@ -123,5 +123,10 @@ namespace frontier
 		{
 			return false;
 		}
+	}
+
+	std::shared_ptr<DirectionalLight> LightController::GetDirectionalLight()
+	{
+		return m_directionalLight.lock()->getComponent<DirectionalLight>();
 	}
 }

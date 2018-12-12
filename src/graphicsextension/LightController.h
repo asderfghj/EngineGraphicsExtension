@@ -9,6 +9,7 @@ namespace frontier
 	class Entity;
 	class Shader;
 	class DepthMap;
+	class DirectionalLight;
 
 	class LightController
 	{
@@ -29,6 +30,7 @@ namespace frontier
 		std::shared_ptr<DepthMap> GetDirectionalLightDepthMap();
 		void SetLightUniformValuesPBR(std::shared_ptr<Shader> _shader);
 		bool HasDirectionalLight();
+		std::shared_ptr<DirectionalLight> LightController::GetDirectionalLight();
 	};
 
 }

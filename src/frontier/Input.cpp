@@ -133,6 +133,10 @@ namespace frontier
 
 			m_keys[M_KEY] = m_sdlKeyboardState[SDL_SCANCODE_M];
 
+			m_keys[Z_KEY] = m_sdlKeyboardState[SDL_SCANCODE_Z];
+
+			m_keys[X_KEY] = m_sdlKeyboardState[SDL_SCANCODE_X];
+
 			m_keys[ONE_KEY] = m_sdlKeyboardState[SDL_SCANCODE_1];
 
 			m_keys[TWO_KEY] = m_sdlKeyboardState[SDL_SCANCODE_2];

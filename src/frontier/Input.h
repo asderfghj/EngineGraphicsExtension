@@ -27,6 +27,8 @@ namespace frontier
 			K_KEY,
 			L_KEY,
 			M_KEY,
+			Z_KEY,
+			X_KEY,
 			ONE_KEY,
 			TWO_KEY,
 			THREE_KEY,

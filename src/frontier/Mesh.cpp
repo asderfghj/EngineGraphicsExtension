@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Texture.h"
 #include "graphicsextension/LightController.h"
+#include "graphicsextension/DepthMap.h"
 #include <GL/glew.h>
 
 namespace frontier
@@ -80,46 +81,9 @@ namespace frontier
 		SetupMeshNoTexCoords();
 	}
 
-	void Mesh::Draw(glm::mat4 _model, glm::mat4 _view, glm::mat4 _proj, TexturePack _textures, std::shared_ptr<Shader> _shader, glm::vec3 _cameraPos, std::vector<Material> _materials, std::shared_ptr<LightController> _lightController)
+	void Mesh::Draw(std::shared_ptr<Shader> _shader)
 	{
-		if (_textures.m_hasDiff)
-		{
-			_shader->SetUniform("material.diffuseMat", _textures.m_Diffuse);
-			_textures.m_Diffuse->BindTexture();
-		}
-
-		if (_textures.m_hasSpec)
-		{
-			_shader->SetUniform("material.specularMat", _textures.m_Specular);
-			_textures.m_Specular->BindTexture();
-		}
-
 		glUseProgram(_shader->GetID());
-
-		_shader->SetUniform("model", _model);
-		_shader->SetUniform("view", _view);
-		_shader->SetUniform("projection", _proj);
-		_shader->SetUniform("viewPos", _cameraPos);
-		_shader->SetUniform("material.ambient", _materials[0].m_ambient);
-		_shader->SetUniform("material.diffuse", _materials[0].m_diffuse);
-		_shader->SetUniform("material.specular", _materials[1].m_specular);
-		_shader->SetUniform("material.shininess", _materials[1].m_shininess);
-
-		//TESTS
-		/*_shader->SetUniform("dirlight.direction", glm::vec3(-0.2f, -1.0f, -0.3f));
-		_shader->SetUniform("dirlight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-		_shader->SetUniform("dirlight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-		_shader->SetUniform("dirlight.specular", glm::vec3(1.0f, 1.0f, 1.0f));*/
-
-		/*_shader->SetUniform("pointlights[0].position", glm::vec3(0.0f, 10.0f, -10.0f));
-		_shader->SetUniform("pointlights[0].ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-		_shader->SetUniform("pointlights[0].diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
-		_shader->SetUniform("pointlights[0].specular", glm::vec3(1.0f, 1.0f, 1.0f));
-		_shader->SetUniform("pointlights[0].constant", 1.0f);
-		_shader->SetUniform("pointlights[0].linear", 0.09f);
-		_shader->SetUniform("pointlights[0].quadratic", 0.032f);*/
-
-		_lightController->SetLightUniformValues(_shader, "dirlight", "pointlights", 4, "", 0);
 
 		glBindVertexArray(m_VAO);
 		glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
@@ -127,4 +91,28 @@ namespace frontier
 		glUseProgram(0);
 
 	}
+
+	void Mesh::DrawDepthMap(glm::mat4 _model, glm::mat4 _lightspace, std::shared_ptr<Shader> _depthBufShader)
+	{
+		glUseProgram(_depthBufShader->GetID());
+
+		_depthBufShader->SetUniform("lightSpaceMatrix", _lightspace);
+		_depthBufShader->SetUniform("model", _model);
+
+		glBindVertexArray(m_VAO);
+		glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+		glBindVertexArray(0);
+		glUseProgram(0);
+	}
+
+	void Mesh::DrawPBR(std::shared_ptr<Shader> _shader)
+	{
+		glUseProgram(_shader->GetID());
+		glBindVertexArray(m_VAO);
+		glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
+		glBindVertexArray(0);
+		glUseProgram(0);
+	}
+
+
 }

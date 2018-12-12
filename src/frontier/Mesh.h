@@ -11,8 +11,10 @@ namespace frontier
 	class Model;
 	class Texture;
 	class LightController;
+	class DepthMap;
 	struct Material;
 	struct TexturePack;
+
 
 	//!Contains vertices, normals and texcoords loaded from an obj.
 	class Mesh 
@@ -49,8 +51,11 @@ namespace frontier
 			\param _tex The texture for the model.
 			\param _shader The shader for the model.
 		*/
-		void Draw(glm::mat4 _model, glm::mat4 _view, glm::mat4 _proj, TexturePack _textures, std::shared_ptr<Shader> _shader, glm::vec3 _cameraPos, std::vector<Material> _materials, std::shared_ptr<LightController> _lightController);
+		void Draw(std::shared_ptr<Shader> _shader);
 
+		void DrawDepthMap(glm::mat4 _model, glm::mat4 _lightspace, std::shared_ptr<Shader> _depthBufShader);
+
+		void DrawPBR(std::shared_ptr<Shader> _shader);
 
 	};
 

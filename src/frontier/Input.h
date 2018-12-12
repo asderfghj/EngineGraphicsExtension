@@ -16,14 +16,26 @@ namespace frontier
 		//!Enum for keyboard buttons, currently configured for current game.
 		enum ListedButtons
 		{
-			FORWARD, //!<Bound to W button.
-			BACK,	//!<Bound to S button.
-			LEFT,	//!<Bound to A button.
-			RIGHT,	//!<Bound to D button.
-			UP,		//!<Bound to Q button.
-			DOWN,	//!<Bound to E button.
-			SHOOT,	//!<Currently not bound.
-			ESC,	//!<Bound to esc.
+			W_KEY, //!<Bound to W button.
+			S_KEY,	//!<Bound to S button.
+			A_KEY,	//!<Bound to A button.
+			D_KEY,	//!<Bound to D button.
+			Q_KEY,		//!<Bound to Q button.
+			E_KEY,	//!<Bound to E button.
+			O_KEY,
+			P_KEY,
+			K_KEY,
+			L_KEY,
+			M_KEY,
+			ONE_KEY,
+			TWO_KEY,
+			THREE_KEY,
+			FOUR_KEY,
+			UP_KEY,
+			DOWN_KEY,
+			LEFT_KEY,
+			RIGHT_KEY,
+			ESC_KEY,	//!<Bound to esc.
 			NUM_OF_BUTTONS	//!<Used for array size.
 		};
 

@@ -61,6 +61,10 @@ namespace frontier
 		if (!ShaderSuccess)
 		{
 			std::cout << "Vertex Shader compiler error" << std::endl;
+			std::vector<char> errorlog(255);
+			glGetShaderInfoLog(vertexShaderID, 255, NULL, errorlog.data());
+			std::string errorString(errorlog.begin(), errorlog.end());
+			std::cout << errorString << std::endl;
 			throw std::exception();
 		}
 
@@ -72,6 +76,10 @@ namespace frontier
 		if (!ShaderSuccess)
 		{
 			std::cout << "Fragment Shader compiler error" << std::endl;
+			std::vector<char> errorlog(255);
+			glGetShaderInfoLog(fragmentShaderID, 255, NULL, errorlog.data());
+			std::string errorString(errorlog.begin(), errorlog.end());
+			std::cout << errorString << std::endl;
 			throw std::exception();
 		}
 
@@ -91,6 +99,11 @@ namespace frontier
 
 		if (!ShaderSuccess)
 		{
+			std::cout << "Shader Link Error" << std::endl;
+			std::vector<char> errorlog(255);
+			glGetShaderInfoLog(ProgramId, 255, NULL, errorlog.data());
+			std::string errorString(errorlog.begin(), errorlog.end());
+			std::cout << errorString << std::endl;
 			throw std::exception();
 		}
 
@@ -129,6 +142,17 @@ namespace frontier
 		}
 	}
 
+	void Shader::SetUniform(const GLchar* _name, bool _value, bool _unsetProgram)
+	{
+		GLint UniformLocation = glGetUniformLocation(m_id, _name);
+		glUseProgram(m_id);
+		glUniform1i(UniformLocation, _value);
+		if (_unsetProgram)
+		{
+			glUseProgram(0);
+		}
+	}
+
 	void Shader::SetUniform(const GLchar* _name, std::weak_ptr<Texture> _texture, bool _unsetProgram)
 	{
 		GLint UniformLocation = glGetUniformLocation(m_id, _name);
@@ -155,6 +179,17 @@ namespace frontier
 		GLint UniformLocation = glGetUniformLocation(m_id, _name);
 		glUseProgram(m_id);
 		glUniformMatrix4fv(UniformLocation, 1, _transpose, glm::value_ptr(_value));
+		if (_unsetProgram)
+		{
+			glUseProgram(0);
+		}
+	}
+
+	void Shader::SetUniform(const GLchar* _name, glm::vec2 _value, bool _unsetProgram)
+	{
+		GLint UniformLocation = glGetUniformLocation(m_id, _name);
+		glUseProgram(m_id);
+		glUniform2fv(UniformLocation, 1, &_value[0]);
 		if (_unsetProgram)
 		{
 			glUseProgram(0);

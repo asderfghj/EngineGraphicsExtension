@@ -4,6 +4,11 @@
 
 namespace frontier
 {
+	RenderTexture::RenderTexture()
+	{
+
+	}
+
 	RenderTexture::RenderTexture(int width, int height, int textureLocation)
 	{
 		/*glGenFramebuffers(1, &m_FBO);
@@ -37,7 +42,7 @@ namespace frontier
 
 		glBindTexture(GL_TEXTURE_2D, m_texID);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGB, GL_FLOAT, 0);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -75,7 +80,6 @@ namespace frontier
 	void RenderTexture::BindRenderTexture()
 	{
 		glEnable(GL_CULL_FACE);
-		glEnable(GL_DEPTH_TEST);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
 		glViewport(0, 0, m_width, m_height);
 	}
@@ -83,7 +87,6 @@ namespace frontier
 	void RenderTexture::UnbindRenderTexture()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
 		glViewport(0, 0, 1000, 800);
 	}
@@ -102,6 +105,16 @@ namespace frontier
 	int RenderTexture::getTexLocation()
 	{
 		return m_textureLocation;
+	}
+
+	int RenderTexture::getWidth()
+	{
+		return m_width;
+	}
+
+	int RenderTexture::getHeight()
+	{
+		return m_height;
 	}
 
 }

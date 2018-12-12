@@ -14,7 +14,6 @@ namespace frontier
 	class Shader;
 	class Model;
 
-
 	//!Container for a model.
 	class MeshRenderer : public Component
 	{
@@ -22,13 +21,28 @@ namespace frontier
 		std::shared_ptr<Model> m_meshData;
 		std::shared_ptr<Texture> m_diffuse;
 		std::shared_ptr<Texture> m_specular;
-		std::shared_ptr<Shader> m_shaderProgram;
+		std::shared_ptr<Texture> m_albedo;
+		std::shared_ptr<Texture> m_normal;
+		bool m_hasNormal;
+		std::shared_ptr<Texture> m_metallic;
+		bool m_hasMetallic;
+		std::shared_ptr<Texture> m_roughness;
+		std::shared_ptr<Texture> m_ao;
+		bool m_hasAO;
+		std::shared_ptr<Shader> m_blinnPhongShader;
+		std::shared_ptr<Shader> m_PBRShader;
+
 
 	public:
 		enum Texturetype
 		{
 			DIFFUSE,
-			SPECULAR
+			SPECULAR,
+			ALBEDO,
+			NORMAL,
+			METALLIC,
+			ROUGHNESS,
+			AO
 		};
 
 		//!Initialises the MeshRenderer with a model
@@ -47,6 +61,12 @@ namespace frontier
 
 		//!Draws the mesh.
 		void OnTick() override;
+
+		void Draw();
+
+		void DrawDepthMap(std::shared_ptr<Shader> _depthBufShader);
+
+		void DrawPBR();
 
 		//!Attaches a shader program to the mesh renderer
 		/*!

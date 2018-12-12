@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "Component.h"
 #include "glm.hpp"
+#include "Shader.h"
 
 namespace frontier
 {
@@ -65,6 +66,10 @@ namespace frontier
 
 		//!Updates all of the components in the entity, call handled by main.
 		void Tick();
+
+		void Draw();
+
+		void DrawDepthMap(std::shared_ptr<Shader> _depthShader);
 
 		//!Sets the pointer to the entity, call handled by main.
 		/*!
@@ -176,6 +181,36 @@ namespace frontier
 			static_assert(std::is_base_of<Component, T>(), "Datatype must be derived of component");
 			std::shared_ptr <T> t = std::make_shared<T>();
 			t->OnInit(m_self, _a, _b, _c, _d, _e, _f);
+			m_components.push_back(t);
+			return t;
+		}
+
+		template <typename T, typename A, typename B, typename C, typename D, typename E, typename F, typename G>
+		std::shared_ptr<T> AddComponent(A _a, B _b, C _c, D _d, E _e, F _f, G _g)
+		{
+			static_assert(std::is_base_of<Component, T>(), "Datatype must be derived of component");
+			std::shared_ptr <T> t = std::make_shared<T>();
+			t->OnInit(m_self, _a, _b, _c, _d, _e, _f, _g);
+			m_components.push_back(t);
+			return t;
+		}
+
+		template <typename T, typename A, typename B, typename C, typename D, typename E, typename F, typename G, typename H>
+		std::shared_ptr<T> AddComponent(A _a, B _b, C _c, D _d, E _e, F _f, G _g, H _h)
+		{
+			static_assert(std::is_base_of<Component, T>(), "Datatype must be derived of component");
+			std::shared_ptr <T> t = std::make_shared<T>();
+			t->OnInit(m_self, _a, _b, _c, _d, _e, _f, _g, _h);
+			m_components.push_back(t);
+			return t;
+		}
+
+		template <typename T, typename A, typename B, typename C, typename D, typename E, typename F, typename G, typename H, typename I>
+		std::shared_ptr<T> AddComponent(A _a, B _b, C _c, D _d, E _e, F _f, G _g, H _h, I _i)
+		{
+			static_assert(std::is_base_of<Component, T>(), "Datatype must be derived of component");
+			std::shared_ptr <T> t = std::make_shared<T>();
+			t->OnInit(m_self, _a, _b, _c, _d, _e, _f, _g, _h, _i);
 			m_components.push_back(t);
 			return t;
 		}

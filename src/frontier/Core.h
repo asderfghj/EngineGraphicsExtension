@@ -23,10 +23,17 @@ namespace frontier
 	class RenderTexture;
 	class RenderQuad;
 	class LightController;
+	class DepthMap;
 
 	//!The main core of the engine. This is where all entities, prefabs and resources get created. 
 	class Core : public std::enable_shared_from_this<Core>
 	{
+	public:
+		enum ShaderMode
+		{
+			BLINN_PHONG,
+			PBR
+		};
 	private:
 		//Entity related
 		std::vector<std::shared_ptr<Entity>> m_entities;
@@ -34,6 +41,7 @@ namespace frontier
 		std::vector<std::shared_ptr<Prefab>> m_prefabs;
 		std::vector<std::shared_ptr<Pooler>> m_poolers;
 		std::vector<std::shared_ptr<Entity>> m_entitiesToActivate;
+		std::vector<std::shared_ptr<DepthMap>> m_depthMapsToRender;
 
 		//Other important classes
 		std::shared_ptr<Environment> m_environment;
@@ -43,6 +51,7 @@ namespace frontier
 		std::shared_ptr<Camera> m_mainCamera;
 		std::shared_ptr<RenderTexture> m_screenRT;
 		std::shared_ptr<RenderQuad> m_screenRQ;
+		std::shared_ptr<DepthMap> m_shadowDepthMap;
 		std::shared_ptr <LightController> m_lightController;
 
 		//Default shaders
@@ -51,16 +60,23 @@ namespace frontier
 		std::shared_ptr<Shader> m_untexturedUIImageShader;
 		std::shared_ptr<Shader> m_texturedUIImageShader;
 		std::shared_ptr<Shader> m_defaultRenderQuadShader;
+		std::shared_ptr<Shader> m_depthMapShader;
+		std::shared_ptr<Shader> m_blinnPhongShader;
+		std::shared_ptr<Shader> m_PBRShader;
 
 		//Important external classes
 		SDL_Window *m_window;
 		SDL_Event m_event;
 		ALCdevice* m_device;
 		ALCcontext* m_context;
+		
+
 
 		//Other information
 		int m_windowWidth, m_windowHeight;
+		ShaderMode m_shaderMode;
 		bool m_running;
+		bool m_updateInfo;
 
 		void GameLoop();
 
@@ -135,6 +151,8 @@ namespace frontier
 
 		std::shared_ptr<LightController> GetLightController();
 
+		void RequestDepthMapRender(std::shared_ptr<DepthMap> _dm);
+
 		//!Sets the self pointer to be used in entity intialisation.
 		/*!
 			\param _self A pointer to the core, used to assign to entities.
@@ -172,7 +190,19 @@ namespace frontier
 		//!Returns a pointer to the default textured UI shader.
 		std::shared_ptr<Shader> getTexturedUiImageShader();
 
+		std::shared_ptr<Shader> getBlinnPhongShader();
+
+		std::shared_ptr<Shader> getPBRShader();
+
 		std::shared_ptr<Shader> getDefaultRenderQuadShader();
+
+		std::shared_ptr<DepthMap> getShadowMap();
+
+		ShaderMode getShaderMode();
+
+		void setShaderMode(ShaderMode _newMode);
+
+		void requestInfoUpdate();
 
 		//!Adds an entity to activation list so that it can be activated next frame.
 		void AddToEntitiesToActivate(std::shared_ptr<Entity> _entityToActivate);

@@ -46,6 +46,8 @@ namespace frontier
 		*/
 		void SetUniform(const GLchar *_name, int _value, bool _unsetProgram = false);
 
+		void SetUniform(const GLchar *_name, bool _value, bool _unsetProgram = false);
+
 		//!Sets a texture uniform
 		/*!
 			\param _name The name of the uniform
@@ -72,6 +74,8 @@ namespace frontier
 			\param _transpose Whether the matrix should be transposed or not
 		*/
 		void SetUniform(const GLchar *_name, glm::mat4 _value, bool _unsetProgram = false, bool _transpose = false);
+
+		void SetUniform(const GLchar *_name, glm::vec2 _value, bool _unsetProgram = false);
 
 		//!Sets a vec3 uniform
 		/*!

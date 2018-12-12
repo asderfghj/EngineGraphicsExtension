@@ -111,19 +111,45 @@ namespace frontier
 
 			m_sdlKeyboardState = SDL_GetKeyboardState(NULL);
 
-			m_keys[FORWARD] = m_sdlKeyboardState[SDL_SCANCODE_W];
+			m_keys[W_KEY] = m_sdlKeyboardState[SDL_SCANCODE_W];
 
-			m_keys[LEFT] = m_sdlKeyboardState[SDL_SCANCODE_A];
+			m_keys[A_KEY] = m_sdlKeyboardState[SDL_SCANCODE_A];
 
-			m_keys[BACK] = m_sdlKeyboardState[SDL_SCANCODE_S];
+			m_keys[S_KEY] = m_sdlKeyboardState[SDL_SCANCODE_S];
 
-			m_keys[RIGHT] = m_sdlKeyboardState[SDL_SCANCODE_D];
+			m_keys[D_KEY] = m_sdlKeyboardState[SDL_SCANCODE_D];
 
-			m_keys[UP] = m_sdlKeyboardState[SDL_SCANCODE_Q];
+			m_keys[Q_KEY] = m_sdlKeyboardState[SDL_SCANCODE_Q];
 
-			m_keys[DOWN] = m_sdlKeyboardState[SDL_SCANCODE_E];
+			m_keys[E_KEY] = m_sdlKeyboardState[SDL_SCANCODE_E];
 
-			m_keys[ESC] = m_sdlKeyboardState[SDL_SCANCODE_ESCAPE];
+			m_keys[O_KEY] = m_sdlKeyboardState[SDL_SCANCODE_O];
+
+			m_keys[P_KEY] = m_sdlKeyboardState[SDL_SCANCODE_P];
+
+			m_keys[K_KEY] = m_sdlKeyboardState[SDL_SCANCODE_K];
+
+			m_keys[L_KEY] = m_sdlKeyboardState[SDL_SCANCODE_L];
+
+			m_keys[M_KEY] = m_sdlKeyboardState[SDL_SCANCODE_M];
+
+			m_keys[ONE_KEY] = m_sdlKeyboardState[SDL_SCANCODE_1];
+
+			m_keys[TWO_KEY] = m_sdlKeyboardState[SDL_SCANCODE_2];
+			
+			m_keys[THREE_KEY] = m_sdlKeyboardState[SDL_SCANCODE_3];
+			
+			m_keys[FOUR_KEY] = m_sdlKeyboardState[SDL_SCANCODE_4];
+
+			m_keys[UP_KEY] = m_sdlKeyboardState[SDL_SCANCODE_UP];
+
+			m_keys[DOWN_KEY] = m_sdlKeyboardState[SDL_SCANCODE_DOWN];
+
+			m_keys[LEFT_KEY] = m_sdlKeyboardState[SDL_SCANCODE_LEFT];
+
+			m_keys[RIGHT_KEY] = m_sdlKeyboardState[SDL_SCANCODE_RIGHT];
+
+			m_keys[ESC_KEY] = m_sdlKeyboardState[SDL_SCANCODE_ESCAPE];
 
 		}
 

@@ -34,6 +34,8 @@ namespace frontier
 			view = m_CustomViewMatrix;
 		}
 
+		//view = glm::lookAt(glm::vec3(-5.0f, 5.0f, -5.0f), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
 		return view;
 	}
 
@@ -51,6 +53,7 @@ namespace frontier
 	glm::mat4 Camera::GetProjectionMatrix()
 	{
 		glm::mat4 proj = glm::perspective(glm::radians(m_FOV), (float)GetCore()->GetWidth() / (float)GetCore()->GetHeight(), m_near, m_far);
+		//glm::mat4 proj = glm::ortho(-100.0f, 100.0f, -100.0f, 100.0f, -100.0f, 200.0f);
 		return proj;
 	}
 

@@ -4,6 +4,7 @@
 #include "Prefab.h"
 #include "MeshRenderer.h"
 #include "Collider.h"
+#include "Skybox.h"
 #include "game/AsteroidBehavior.h"
 #include "game/ProjectileBehavior.h"
 #include <iostream>
@@ -25,6 +26,39 @@ namespace frontier
 			}
 		}
 
+	}
+
+	void Entity::Draw()
+	{
+		if (m_active)
+		{
+			if (hasComponent<MeshRenderer>())
+			{
+				if (GetCore()->getShaderMode() == Core::BLINN_PHONG)
+				{
+					getComponent<MeshRenderer>()->Draw();
+				}
+				else
+				{
+					getComponent<MeshRenderer>()->DrawPBR();
+				}
+			}
+			else if (hasComponent<Skybox>())
+			{
+				getComponent<Skybox>()->Draw();
+			}
+		}
+	}
+
+	void Entity::DrawDepthMap(std::shared_ptr<Shader> _depthShader)
+	{
+		if (m_active)
+		{
+			if (hasComponent<MeshRenderer>())
+			{
+				getComponent<MeshRenderer>()->DrawDepthMap(_depthShader);
+			}
+		}
 	}
 
 	void Entity::Init(std::weak_ptr<Core> _corePtr)

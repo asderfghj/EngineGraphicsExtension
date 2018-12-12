@@ -4,7 +4,9 @@
 #include "frontier/Core.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
+#include "SpotLight.h"
 #include "frontier/Entity.h"
+#include "frontier/Shader.h"
 
 namespace frontier
 {
@@ -49,17 +51,77 @@ namespace frontier
 		//}
 	}
 
-	void LightController::SetLightUniformValues(std::shared_ptr<Shader> _shader, std::string _directionalLightUniformID, std::string _pointLightUniformID, int _numOfPointLights, std::string _spotLightUniformID, int _numOfSpotLights)
+	void LightController::SetLightUniformValues(std::shared_ptr<Shader> _shader)
 	{
 		if (!m_directionalLight.expired())
 		{
-			m_directionalLight.lock()->getComponent<DirectionalLight>()->SetLightUniform(_directionalLightUniformID, _shader);
+			_shader->SetUniform("NR_DIR_LIGHTS", 1);
+			m_directionalLight.lock()->getComponent<DirectionalLight>()->SetLightUniform("dirlight", _shader);
 		}
-		for (int i = 0; i < _numOfPointLights && i < m_pointLights.size(); i++)
+		else
 		{
-			m_pointLights[i].lock()->getComponent<PointLight>()->SetLightUniform(_pointLightUniformID, _shader, i);
+			_shader->SetUniform("NR_DIR_LIGHTS", 0);
 		}
+		_shader->SetUniform("hasDirLight", HasDirectionalLight());
+		for (int i = 0; i < m_pointLights.size(); i++)
+		{
+			m_pointLights[i].lock()->getComponent<PointLight>()->SetLightUniform("pointlights", _shader, i);
+		}
+
+		_shader->SetUniform("NR_POINT_LIGHTS", (int)m_pointLights.size());
+
+		for (int i = 0; i < m_spotLights.size(); i++)
+		{
+			m_spotLights[i].lock()->getComponent<SpotLight>()->SetLightUniform("spotlights", _shader, i);
+		}
+
+		_shader->SetUniform("NR_SPOT_LIGHTS", (int)m_spotLights.size());
 
 	}
 
+	glm::mat4 LightController::GetLightSpacematrix()
+	{
+		return m_directionalLight.lock()->getComponent<DirectionalLight>()->getLightSpaceMatrix();
+	}
+
+	glm::vec3 LightController::GetDirectionalLightPosition()
+	{
+		return m_directionalLight.lock()->getComponent<DirectionalLight>()->getPosition();
+	}
+
+	std::shared_ptr<DepthMap> LightController::GetDirectionalLightDepthMap()
+	{
+		return m_directionalLight.lock()->getComponent<DirectionalLight>()->getDepthMap();
+	}
+
+	void LightController::SetLightUniformValuesPBR(std::shared_ptr<Shader> _shader)
+	{
+		if (!m_directionalLight.expired())
+		{
+			_shader->SetUniform("NR_DIR_LIGHTS", 1);
+			m_directionalLight.lock()->getComponent<DirectionalLight>()->SetLightUniformPBR("dirlights", _shader);
+		}
+		else
+		{
+			_shader->SetUniform("NR_DIR_LIGHTS", 0);
+		}
+		for (int i = 0; i < m_pointLights.size(); i++)
+		{
+			m_pointLights[i].lock()->getComponent<PointLight>()->SetLightUniformPBR("pointlights", _shader, i);
+		}
+
+		_shader->SetUniform("NR_POINT_LIGHTS", (int)m_pointLights.size());
+	}
+
+	bool LightController::HasDirectionalLight()
+	{
+		if (!m_directionalLight.expired())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }

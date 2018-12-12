@@ -99,12 +99,29 @@ namespace frontier
 		return rtn;
 	}
 
-	void Model::Draw(glm::mat4 _model, glm::mat4 _view, glm::mat4 _proj, TexturePack _textures, std::shared_ptr<Shader> _shader, glm::vec3 _cameraPos, std::shared_ptr<LightController> _lightController)
+	void Model::Draw(std::shared_ptr<Shader> _shader)
 	{
 		for (size_t i = 0; i < m_meshes.size(); i++)
 		{
-			m_meshes[i]->Draw(_model, _view, _proj, _textures, _shader, _cameraPos, m_modelMats, _lightController);
+			m_meshes[i]->Draw(_shader);
 		}
 	}
+
+	void Model::DrawDepthMap(glm::mat4 _model, glm::mat4 _lightspace, std::shared_ptr<Shader> _depthBufShader)
+	{
+		for (size_t i = 0; i < m_meshes.size(); i++)
+		{
+			m_meshes[i]->DrawDepthMap(_model, _lightspace, _depthBufShader);
+		}
+	}
+
+	void Model::DrawPBR(std::shared_ptr<Shader> _shader)
+	{
+		for (size_t i = 0; i < m_meshes.size(); i++)
+		{
+			m_meshes[i]->DrawPBR(_shader);
+		}
+	}
+
 
 }

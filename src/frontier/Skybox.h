@@ -1,3 +1,7 @@
+#ifndef SKYBOX_H_
+#define SKYBOX_H_
+
+
 #include <memory>
 #include <vector>
 #include <GL/glew.h>
@@ -30,8 +34,12 @@ namespace frontier
 		//!Draws the skybox.
 		void OnTick() override;
 
+		void Draw();
 
 	};
 
 
 }
+
+
+#endif // !SKYBOX_H_

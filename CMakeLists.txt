@@ -43,6 +43,8 @@ add_executable(game
 	src/game/AsteroidSpawner.h
 	src/game/FPSCamera.cpp
 	src/game/FPSCamera.h
+	src/game/LightMove.cpp
+	src/game/LightMove.h
 )
 
 add_library(frontier
@@ -113,8 +115,11 @@ add_library(frontier_graphicsEX
 	src/graphicsextension/RenderTexture.h
 	src/graphicsextension/RenderQuad.cpp
 	src/graphicsextension/RenderQuad.h
+	src/graphicsextension/Plane.cpp
+	src/graphicsextension/Plane.h
+	src/graphicsextension/DepthMap.cpp
+	src/graphicsextension/DepthMap.h
 	src/graphicsextension/FrontierGraphics.h
-	
 )
 
 if(MSVC)

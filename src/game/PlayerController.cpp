@@ -36,10 +36,10 @@ void PlayerController::OnTick()
 	}
 	else
 	{
-		moveForward = GetInput()->GetKey(frontier::Input::FORWARD);
-		rotateLeft = GetInput()->GetKey(frontier::Input::LEFT);
-		rotateRight = GetInput()->GetKey(frontier::Input::RIGHT);
-		shooting = GetInput()->GetKey(frontier::Input::SHOOT);
+		moveForward = GetInput()->GetKey(frontier::Input::W_KEY);
+		rotateLeft = GetInput()->GetKey(frontier::Input::A_KEY);
+		rotateRight = GetInput()->GetKey(frontier::Input::D_KEY);
+		shooting = GetInput()->GetKey(frontier::Input::O_KEY);
 	}
 
 	if (moveForward)

@@ -7,7 +7,7 @@ void FPSCamera::OnInit(std::weak_ptr<frontier::Entity> _parent)
 	frontier::Component::OnInit(_parent);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 	m_sensitivity = 0.05f;
-	m_moveSpeed = 1.0f;
+	m_moveSpeed = 5.0f;
 }
 
 void FPSCamera::OnTick()
@@ -45,40 +45,50 @@ void FPSCamera::OnTick()
 	GetEntity()->getComponent<frontier::Transform>()->SetRotation(glm::vec3(m_pitch, m_yaw, 0.0f));
 
 
-	if (GetInput()->GetKey(frontier::Input::FORWARD))
+	if (GetInput()->GetKey(frontier::Input::W_KEY))
 	{
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(GetEntity()->getComponent<frontier::Transform>()->GetPosition() += forwardVector * (m_moveSpeed * GetEnvironment()->GetDeltaTime()));
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(glm::vec3(GetEntity()->getComponent<frontier::Transform>()->GetPosition().x, m_yPos, GetEntity()->getComponent<frontier::Transform>()->GetPosition().z));
 	}
 
-	if (GetInput()->GetKey(frontier::Input::BACK))
+	if (GetInput()->GetKey(frontier::Input::S_KEY))
 	{
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(GetEntity()->getComponent<frontier::Transform>()->GetPosition() -= forwardVector * (m_moveSpeed * GetEnvironment()->GetDeltaTime()));
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(glm::vec3(GetEntity()->getComponent<frontier::Transform>()->GetPosition().x, m_yPos, GetEntity()->getComponent<frontier::Transform>()->GetPosition().z));
 	}
 
-	if (GetInput()->GetKey(frontier::Input::LEFT))
+	if (GetInput()->GetKey(frontier::Input::A_KEY))
 	{
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(GetEntity()->getComponent<frontier::Transform>()->GetPosition() -= glm::normalize(glm::cross(forwardVector, glm::vec3(0.0f, 1.0f, 0.0f))) * (m_moveSpeed * GetEnvironment()->GetDeltaTime()));
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(glm::vec3(GetEntity()->getComponent<frontier::Transform>()->GetPosition().x, m_yPos, GetEntity()->getComponent<frontier::Transform>()->GetPosition().z));
 	}
 
-	if (GetInput()->GetKey(frontier::Input::RIGHT))
+	if (GetInput()->GetKey(frontier::Input::D_KEY))
 	{
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(GetEntity()->getComponent<frontier::Transform>()->GetPosition() += glm::normalize(glm::cross(forwardVector, glm::vec3(0.0f, 1.0f, 0.0f))) * (m_moveSpeed * GetEnvironment()->GetDeltaTime()));
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(glm::vec3(GetEntity()->getComponent<frontier::Transform>()->GetPosition().x, m_yPos, GetEntity()->getComponent<frontier::Transform>()->GetPosition().z));
 	}
 
-	if (GetInput()->GetKey(frontier::Input::UP))
+	if (GetInput()->GetKey(frontier::Input::Q_KEY))
 	{
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(GetEntity()->getComponent<frontier::Transform>()->GetPosition() +=  glm::vec3(0.0f, 1.0f, 0.0f) * (m_moveSpeed * GetEnvironment()->GetDeltaTime()));
 		m_yPos = GetEntity()->getComponent<frontier::Transform>()->GetPosition().y;
 	}
 
-	if (GetInput()->GetKey(frontier::Input::DOWN))
+	if (GetInput()->GetKey(frontier::Input::E_KEY))
 	{
 		GetEntity()->getComponent<frontier::Transform>()->SetPosition(GetEntity()->getComponent<frontier::Transform>()->GetPosition() -= glm::vec3(0.0f, 1.0f, 0.0f) * (m_moveSpeed * GetEnvironment()->GetDeltaTime()));
 		m_yPos = GetEntity()->getComponent<frontier::Transform>()->GetPosition().y;
+	}
+
+	if (GetInput()->GetKey(frontier::Input::O_KEY))
+	{
+		GetCore()->setShaderMode(frontier::Core::BLINN_PHONG);
+	}
+
+	if (GetInput()->GetKey(frontier::Input::P_KEY))
+	{
+		GetCore()->setShaderMode(frontier::Core::PBR);
 	}
 
 }

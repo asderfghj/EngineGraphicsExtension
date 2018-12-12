@@ -54,4 +54,24 @@ namespace frontier
 
 	}
 
+	void PointLight::SetLightUniformPBR(std::string _uniformName, std::weak_ptr<Shader> _shader, int _index)
+	{
+		std::string arrayIndexStr = "";
+
+		if (_index > -1)
+		{
+			arrayIndexStr = "[" + std::to_string(_index) + "]";
+		}
+
+		std::string positionUniformID = _uniformName + arrayIndexStr + ".position";
+
+		_shader.lock()->SetUniform(positionUniformID.c_str(), GetEntity()->getComponent<Transform>()->GetPosition());
+
+		std::string coloruniformID = _uniformName + arrayIndexStr + ".color";
+
+		glm::vec3 modifiedColor = m_diffuse * 300.0f;
+
+		_shader.lock()->SetUniform(coloruniformID.c_str(), modifiedColor);
+	}
+
 }

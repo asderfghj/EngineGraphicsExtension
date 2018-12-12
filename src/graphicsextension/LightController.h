@@ -1,12 +1,14 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include "glm.hpp"
 
 namespace frontier
 {
 	class Core;
 	class Entity;
 	class Shader;
+	class DepthMap;
 
 	class LightController
 	{
@@ -21,7 +23,12 @@ namespace frontier
 		void AddPointLight(std::weak_ptr<Entity> _newPointLight);
 		void SetDirectionalLight(std::weak_ptr<Entity> _directionalLight);
 		void AddSpotLight(std::weak_ptr<Entity> _newSpotLight);
-		void SetLightUniformValues(std::shared_ptr<Shader> _shader, std::string _directionalLightUniformID, std::string _pointLightUniformID, int _numOfPointLights, std::string _spotLightUniformID, int _numOfSpotLights);
+		void SetLightUniformValues(std::shared_ptr<Shader> _shader);
+		glm::mat4 GetLightSpacematrix();
+		glm::vec3 GetDirectionalLightPosition();
+		std::shared_ptr<DepthMap> GetDirectionalLightDepthMap();
+		void SetLightUniformValuesPBR(std::shared_ptr<Shader> _shader);
+		bool HasDirectionalLight();
 	};
 
 }

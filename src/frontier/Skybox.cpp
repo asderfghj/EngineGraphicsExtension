@@ -79,17 +79,20 @@ namespace frontier
 	void Skybox::OnTick()
 	{
 		Component::OnTick();
-		
+	}
+
+	void Skybox::Draw()
+	{
 		glDepthMask(false);
 		m_shaderProgram->SetUniform("skybox", m_texture);
 		m_texture->Bindtexture();
-		
+
 		glUseProgram(m_shaderProgram->GetID());
 
 		m_shaderProgram->SetUniform("projection", GetEntity()->GetCore()->GetMainCamera()->GetProjectionMatrix());
 		m_shaderProgram->SetUniform("view", glm::mat4(glm::mat3(GetEntity()->GetCore()->GetMainCamera()->GetViewMatrix())));
 		glm::mat4 scaler = glm::scale(glm::mat4(1.0f), glm::vec3(50.0f, 50.0f, 50.0f));
-		
+
 
 
 		m_shaderProgram->SetUniform("scaler", scaler);
@@ -99,7 +102,5 @@ namespace frontier
 		glBindVertexArray(0);
 		glUseProgram(0);
 		glDepthMask(true);
-
 	}
-
 }

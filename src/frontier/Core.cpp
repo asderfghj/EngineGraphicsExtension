@@ -11,11 +11,12 @@
 #include "graphicsextension/RenderTexture.h"
 #include "graphicsextension/RenderQuad.h"
 #include "graphicsextension/LightController.h"
+#include "graphicsextension/DepthMap.h"
 #include <iostream>
 #include <GL/glew.h>
 #include <map>
 #include <exception>
-
+#include <string>
 
 namespace frontier
 {
@@ -40,7 +41,7 @@ namespace frontier
 
 			m_screenRT->Clear();
 
-			m_screenRT->BindRenderTexture();
+			
 
 			//ticks through all ui and regular entities and other classes
 			for (size_t i = 0; i < m_uiElements.size(); i++)
@@ -53,7 +54,40 @@ namespace frontier
 				m_entities[i]->Tick();
 			}
 
+			for (size_t i = 0; i < m_depthMapsToRender.size(); i++)
+			{
+				glViewport(0, 0, m_depthMapsToRender[i]->getWidth(), m_depthMapsToRender[i]->getHeight());
+				m_depthMapsToRender[i]->BindRenderTexture();
+				glClear(GL_DEPTH_BUFFER_BIT);
+				for (size_t i = 0; i < m_entities.size(); i++)
+				{
+					m_entities[i]->DrawDepthMap(m_depthMapShader);
+				}
+				m_depthMapsToRender[i]->UnbindRenderTexture();
+				glViewport(0, 0, m_windowWidth, m_windowHeight);
+			}
+
+			m_depthMapsToRender.clear();
+
+			glViewport(0, 0, m_windowWidth, m_windowHeight);
+
+			m_screenRT->BindRenderTexture();
+
+			for (size_t i = 0; i < m_entities.size(); i++)
+			{
+				m_entities[i]->Draw();
+			}
+
 			m_screenRT->UnbindRenderTexture();
+
+			if (m_input->GetKey(Input::M_KEY))
+			{
+				m_screenRQ->AttachRendertexture(m_lightController->GetDirectionalLightDepthMap());
+			}
+			else
+			{
+				m_screenRQ->AttachRendertexture(m_screenRT);
+			}
 
 			m_screenRQ->Draw();
 
@@ -122,10 +156,19 @@ namespace frontier
 
 			m_environment->IncrementFrameCounter();
 
-			if (m_input->GetKey(Input::ESC) && !m_input->IsJoystickConnected())
+			if (m_input->GetKey(Input::ESC_KEY) && !m_input->IsJoystickConnected())
 			{
 				Stop();
 			}
+
+			if (m_updateInfo)
+			{
+				std::system("CLS");
+				std::cout << "Current Shader Mode: " << (m_shaderMode == BLINN_PHONG ? "blinn-phong" : "physically based rendering") << std::endl;
+				m_screenRQ->InfoDump();
+				m_updateInfo = false;
+			}
+
 		}
 		//cleanup
 		m_input->FreeJoystick();
@@ -179,6 +222,7 @@ namespace frontier
 		}
 
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
 
 		//OpenAL initialisation
 		m_device = alcOpenDevice(NULL);
@@ -208,7 +252,7 @@ namespace frontier
 
 		//main camera initialisation
 		std::shared_ptr<Entity> _camera = AddEntity();
-		std::shared_ptr<Camera> _cameraComponent = _camera->AddComponent<Camera, float, float, float>(45.0f, 0.01f, 100.0f);
+		std::shared_ptr<Camera> _cameraComponent = _camera->AddComponent<Camera, float, float, float>(45.0f, 0.01f, 1000.0f);
 		SetMainCamera(_cameraComponent);
 
 		//default shader initialisation
@@ -217,11 +261,17 @@ namespace frontier
 		m_untexturedUIImageShader = Shader::Create("../resources/fragmentshaders/untexui.fs", "../resources/vertexshaders/untexui.vs", { "in_position" }, m_resources);
 		m_texturedUIImageShader = Shader::Create("../resources/fragmentshaders/texui.fs", "../resources/vertexshaders/texui.vs", { "in_position", "in_texCoord" }, m_resources);
 		m_defaultRenderQuadShader = Shader::Create("../resources/fragmentshaders/renderquad.fs", "../resources/vertexshaders/renderquad.vs", { "in_position", "in_texCoord" }, m_resources);
+		m_depthMapShader = Shader::Create("../resources/fragmentshaders/depthMap.fs", "../resources/vertexshaders/depthMap.vs", { "aPos" }, m_resources);
+		m_blinnPhongShader = frontier::Shader::Create("../resources/fragmentshaders/LightingNoSpecularMap.fs", "../resources/vertexshaders/LightingNoSpecularMap.vs", { "aPos", "aNormal", "aTexCoord" }, m_resources);
+		m_PBRShader = frontier::Shader::Create("../resources/fragmentshaders/PBR.fs", "../resources/vertexshaders/PBR.vs", { "aPos", "aNormal", "aTexCoord" }, m_resources);
 
+		m_shadowDepthMap = std::make_shared<DepthMap>(1024, 1024, 1);
 		m_screenRT = std::make_shared<RenderTexture>(m_windowWidth, m_windowHeight, 3);
 		m_screenRQ = std::make_shared<RenderQuad>();
 		m_screenRQ->OnInit(m_self);
 		m_screenRQ->AttachRendertexture(m_screenRT);
+		m_shaderMode = BLINN_PHONG;
+		requestInfoUpdate();
 	}
 
 	void Core::Start()
@@ -324,6 +374,11 @@ namespace frontier
 		return m_lightController;
 	}
 
+	void Core::RequestDepthMapRender(std::shared_ptr<DepthMap> _dm)
+	{
+		m_depthMapsToRender.push_back(_dm);
+	}
+
 	void Core::SetSelf(std::weak_ptr<Core> _selfPtr)
 	{
 		m_self = _selfPtr;
@@ -378,9 +433,35 @@ namespace frontier
 		return m_texturedUIImageShader;
 	}
 
+	std::shared_ptr<Shader> Core::getBlinnPhongShader()
+	{
+		return m_blinnPhongShader;
+	}
+
+	std::shared_ptr<Shader> Core::getPBRShader()
+	{
+		return m_PBRShader;
+	}
+
 	std::shared_ptr<Shader> Core::getDefaultRenderQuadShader()
 	{
 		return m_defaultRenderQuadShader;
+	}
+
+	std::shared_ptr<DepthMap> Core::getShadowMap()
+	{
+		return m_shadowDepthMap;
+	}
+
+	Core::ShaderMode Core::getShaderMode()
+	{
+		return m_shaderMode;
+	}
+
+	void Core::setShaderMode(ShaderMode _newMode)
+	{
+		m_shaderMode = _newMode;
+		requestInfoUpdate();
 	}
 
 	void Core::AddToEntitiesToActivate(std::shared_ptr<Entity> _entityToActivate)
@@ -388,4 +469,8 @@ namespace frontier
 		m_entitiesToActivate.push_back(_entityToActivate);
 	}
 
+	void Core::requestInfoUpdate()
+	{
+		m_updateInfo = true;
+	}
 }

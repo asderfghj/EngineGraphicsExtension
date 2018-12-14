@@ -17,38 +17,17 @@ namespace frontier
 
 	void LightController::AddPointLight(std::weak_ptr<Entity> _newPointLight)
 	{
-		//if (_newPointLight.lock()->hasComponent<PointLight>())
-		//{
-			m_pointLights.push_back(_newPointLight);
-		//}
-		//else
-		//{
-		//	std::cout << "Does not contain point light, not added" << std::endl;
-		//}
+		m_pointLights.push_back(_newPointLight);
 	}
 
 	void LightController::SetDirectionalLight(std::weak_ptr<Entity> _directionalLight)
 	{
-		//if (_directionalLight.lock()->hasComponent<DirectionalLight>())
-		//{
-			m_directionalLight = _directionalLight;
-		//}
-		//else
-		//{
-		//	std::cout << "Does not contain directional light, not added" << std::endl;
-		//}
+		m_directionalLight = _directionalLight;
 	}
 
 	void LightController::AddSpotLight(std::weak_ptr<Entity> _newSpotLight)
 	{
-		//if (_newSpotLight.lock()->hasComponent<SpotLight>())
-		//{
 		m_spotLights.push_back(_newSpotLight);
-		//}
-		//else
-		//{
-		//	std::cout << "Does not contain spotlight, not added" << std::endl;
-		//}
 	}
 
 	void LightController::SetLightUniformValues(std::shared_ptr<Shader> _shader)

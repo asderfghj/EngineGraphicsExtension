@@ -78,7 +78,7 @@ uniform int NR_SPOT_LIGHTS;
 void main()
 {
 	vec3 norm = vec3(0.0);
-	//processing information
+
 	if(material.hasNormalmap)
 	{	
 		norm = getNormalFromMap();
@@ -159,20 +159,15 @@ vec3 CalculateSpotLight(SpotLight _light, vec3 _normal, vec3 _fragPos, vec3 _vie
 	vec3 halfwayDir = normalize(lightDir + _viewDir);
 	
     float diff = max(dot(_normal, lightDir), 0.0);
-    // specular shading
-    //vec3 reflectDir = reflect(-lightDir, _normal);
 	
 	
 	
     float spec = pow(max(dot(_normal, halfwayDir), 0.0), material.shininess);
-    // attenuation
     float distance = length(_light.position - _fragPos);
     float attenuation = 1.0 / (_light.constant + _light.linear * distance + _light.quadratic * (distance * distance));    
-    // spotlight intensity
     float theta = dot(lightDir, normalize(-_light.direction)); 
     float epsilon = _light.cutoff - _light.outercutoff;
     float intensity = clamp((theta - _light.outercutoff) / epsilon, 0.0, 1.0);
-    // combine results
     //vec3 ambient = _light.ambient * vec3(texture(material.diffuseMat, TexCoord).xyz);
     vec3 diffuse = _light.diffuse * diff * vec3(texture(material.diffuseMat, TexCoords).xyz);
     vec3 specular = _light.specular * spec * vec3(texture(material.diffuseMat, TexCoords).xyz);
@@ -185,13 +180,9 @@ vec3 CalculateSpotLight(SpotLight _light, vec3 _normal, vec3 _fragPos, vec3 _vie
 float ShadowCalculation(DirectionalLight _light, vec4 _fragPosLightSpace, vec3 _normal, vec3 _lightdir)
 {
 	vec3 projCoords = _fragPosLightSpace.xyz / _fragPosLightSpace.w;
-	// transform to [0,1] range
 	projCoords = projCoords * 0.5 + 0.5;
-	// get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
 	float closestDepth = texture(_light.shadowMap, projCoords.xy).r; 
-	// get depth of current fragment from light's perspective
 	float currentDepth = projCoords.z;
-	// check whether current frag pos is in shadow
 	float bias = max(0.05 * (1.0 - dot(_normal, _lightdir)), 0.005);
 
 	float shadow = 0.0;

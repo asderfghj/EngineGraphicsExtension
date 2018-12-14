@@ -115,8 +115,6 @@ add_library(frontier_graphicsEX
 	src/graphicsextension/RenderTexture.h
 	src/graphicsextension/RenderQuad.cpp
 	src/graphicsextension/RenderQuad.h
-	src/graphicsextension/Plane.cpp
-	src/graphicsextension/Plane.h
 	src/graphicsextension/DepthMap.cpp
 	src/graphicsextension/DepthMap.h
 	src/graphicsextension/FrontierGraphics.h

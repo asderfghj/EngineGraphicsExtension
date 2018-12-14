@@ -11,29 +11,6 @@ namespace frontier
 
 	RenderTexture::RenderTexture(int width, int height, int textureLocation)
 	{
-		/*glGenFramebuffers(1, &m_FBO);
-		if (!m_FBO)
-		{
-			throw std::exception();
-		}
-		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-		glGenTextures(1, &m_id);
-		m_textureLocation = 3;
-
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_id, 0);
-
-		GLuint rbo = 0;
-		glGenRenderbuffers(1, &rbo);
-		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		*/
-
 		m_FBO = 0;
 		glGenFramebuffers(1, &m_FBO);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);

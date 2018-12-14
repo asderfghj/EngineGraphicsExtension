@@ -12,7 +12,6 @@ namespace frontier
 		GLuint m_FBO, m_texID;
 		int m_width, m_height, m_textureLocation;
 	public:
-		//static std::shared_ptr<RenderTexture> Create(int width, int height);
 		RenderTexture();
 		RenderTexture(int width, int height, int textureLocation);
 		GLuint GetRenderTextureID();

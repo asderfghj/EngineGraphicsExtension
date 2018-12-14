@@ -70,7 +70,6 @@ namespace frontier
 
 	glm::vec3 DirectionalLight::getDirection()
 	{
-		//return GetEntity()->getComponent<Transform>()->GetPosition();
 		return m_direction;
 	}
 
